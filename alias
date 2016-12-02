@@ -85,6 +85,9 @@ public-ports = ec2 describe-security-groups \
 # List or set your region
 region = !f() { [[ $# -eq 1 ]] && aws configure set region "$1" || aws configure get region; }; f
 
+list-iam-users = iam list-users --query "Users[].UserName" --output table
+list-user-keys = !f() { aws iam list-access-keys --output text --user-name "$1" --query "AccessKeyMetadata[].AccessKeyId"; }; f
+
 find-access-key = !f() {
     clear_to_eol=$(tput el)
     for i in $(aws iam list-users --query "Users[].UserName" --output text); do
