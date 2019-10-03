@@ -103,6 +103,11 @@ find-access-key = !f() {
     fi
   }; f
 
+clear-virtual-mfa = !f() {
+  account_id=$(aws sts get-caller-identity --output json | jq -r '.Account')
+  aws iam delete-virtual-mfa-device--serial-number "arn:aws:iam::${account_id}:mfa/$1"
+}; f
+
 docker-ecr-login =
   !f() {
     region=$(aws configure get region)
